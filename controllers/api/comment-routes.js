@@ -1,14 +1,16 @@
-const router = require('express').Router();
-const { Comment } = require('../../models/');
-const withAuth = require('../../utils/auth');
+const router = require("express").Router();
+const { Comment } = require("../../models/");
+const { beforeDestroy } = require("../../models/Post");
+const withAuth = require("../../utils/auth");
 
-// URL: /api/comment
-router.post('/', withAuth, async (req, res) => {
+// URL:
+router.post("/", withAuth, async (req, res) => {
   try {
     const newComment = await Comment.create({
       // TODO: COMMENT BODY IN REQUEST USING SPREAD
-
+      ...req.body,
       // TODO: SET USERID TO SESSION LOGGEDIN USERID
+      userId: req.session.userId,
     });
     res.json(newComment);
   } catch (err) {
